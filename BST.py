@@ -38,23 +38,28 @@ class BST:
                 self.leftchild.right = Node(data)
                 self.leftchild.right = self.leftchild.right
 
-    def inorder(self, root):
-        if (root):
-            self.inorder(root.left)
-            print(root.data)
-            self.inorder(root.right)
+    def inorder(self, root,inorder_list):
 
-    def preorder(self, root):
         if (root):
-            print("preorder" + str(root.data))
-            self.preorder(root.left)
-            self.preorder(root.right)
+            self.inorder(root.left,inorder_list)
+            inorder_list.append(root.data)
+            self.inorder(root.right,inorder_list)
+        return inorder_list
 
-    def postorder(self, root):
+    def preorder(self, root,preorder_list):
         if (root):
-            self.preorder(root.left)
-            self.preorder(root.right)
-            print("postorder" + str(root.data))
+            preorder_list.append(root.data)
+            self.preorder(root.left,preorder_list)
+            self.preorder(root.right,preorder_list)
+
+        return preorder_list
+
+    def postorder(self, root,postorder_list):
+        if (root):
+            self.preorder(root.left,postorder_list)
+            self.preorder(root.right,postorder_list)
+            postorder_list.append(root.data)
+        return postorder_list
 
     def depth_BST(self, root):
         if (root is None):
@@ -62,13 +67,21 @@ class BST:
         else:
             return 1 + max(self.depth_BST(root.left), self.depth_BST(root.right))
 
+    def populate_bst(self,list1):
+        for i in list1:
+            self.add_node(i)
+
 
 if __name__ == '__main__':
     bst = BST()
     list1 = [10, 20, 5, 14, 26, 23, 34, 45, 78]
-    for i in list1:
-        bst.add_node(i)
-    bst.inorder(bst.root)
-    bst.preorder(bst.root)
-    bst.postorder(bst.root)
+    inorder_list=[]
+    preorder_list=[]
+    postorder_list=[]
+
+    bst.populate_bst(list1)
+    print ("Inorderlist="+','.join(str(i) for i in bst.inorder(bst.root,inorder_list)))
+    print("Preorderlist=" + ','.join(str(i) for i in bst.preorder(bst.root,preorder_list)))
+    print("Postorderlist=" + ','.join(str(i) for i in bst.postorder(bst.root,postorder_list)))
+
     print("Deptth of BST="+str(bst.depth_BST(bst.root)))
